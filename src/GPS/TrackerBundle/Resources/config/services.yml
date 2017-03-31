@@ -1,0 +1,7 @@
+parameters:
+#    gps_tracker.example.class: GPS\TrackerBundle\Example
+
+services:
+#    gps_tracker.example:
+#        class: %gps_tracker.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

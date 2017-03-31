@@ -1,0 +1,37 @@
+<div class="modal fade" id="addAppareil" tabindex="-1" role="dialog" aria-labelledby="addAppareil" style="color:black;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h2 class="modal-title text-info text-center" id="myModalLabel">Ajout d'un appareil</h2>
+          </div>
+          <div class="modal-body col-md-10 col-md-offset-1">
+              <form id="form1" method="post" action="{{path('user_accueil')}}">
+                  <div class="form-group">
+                      {{form_label(form.nomAppareil, "Nom", {'label_attr': {'for': 'nomAppareil', 'class': 'control-label'}})}}
+                      <strong class="text text-danger">*</strong>
+                      {{form_widget(form.nomAppareil, {'attr': {'id': 'nomAppareil', 'required': 'required', 'class': 'form-control'}})}}
+                  </div>
+                  <div class="form-group">
+                      {{form_label(form.codeAppareil, "Code", {'label_attr': {'for': 'code', 'class': 'control-label'}})}}
+                      <strong class="text text-danger">*</strong>
+                      {{form_widget(form.codeAppareil, {'attr': {'id': 'code', 'required': 'required', 'class': 'form-control'}})}}
+                  </div>
+                  <div class="form-group">
+                      {{form_label(form.typeAppareil, "Type", {'label_attr': {'for': 'typeApp', 'class': 'control-label'}})}}
+                      <strong class="text text-danger">*</strong>
+                      {{form_widget(form.typeAppareil, {'attr': {'id': 'typeApp', 'required': 'required', 'class': 'form-control'}})}}
+                  </div>
+                  <div class="form-group">
+                      {{form_label(form.descAppareil, "Description", {'label_attr': {'for': 'descAppareil', 'class': 'control-label'}})}}
+                      {{form_widget(form.descAppareil, {'attr': {'id': 'descAppareil', 'class': 'form-control'}})}}
+                  </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+              <button type="reset" form="form1" class="btn btn-warning" data-dismiss="modal">Annuler</button>
+              <button type="submit" form="form1" class="btn btn-success">Enregistrer</button>
+          </div>
+        </div>
+    </div>
+</div>

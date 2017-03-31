@@ -1,0 +1,128 @@
+{% extends 'GPSTrackerBundle::layout.html.twig' %}
+
+{% block body %}
+    {% include 'GPSTrackerBundle:Utilisateur:form_appareil.html.twig' %}
+
+    {{parent()}}
+
+    {% block carousel %}{% endblock %}
+
+    {# Affichage des message recu du serveur #}
+
+    <div class="row">
+        <div class="col-md-3">
+            {% if appareils|length!=0 %}
+                <h3 class="text text-default"><span class="glyphicon glyphicon-list">Appareils</span></h3>
+            {% endif %}
+            <div class="list-group">
+            {% for appareil in appareils %}
+                <a href="#" class="list-group-item indexeur" id="{{appareil.codeAppareil}}">
+                    <span>{{appareil.nomAppareil|capitalize}}</span>
+                </a>
+            {% endfor %}
+            </div>
+
+        </div>
+        <div  class="col-md-7">
+            <!--Affichage du message de suuces-->
+            <div class="row">
+                    {% for msg in app.session.flashBag.get('addAppSuccess') %}
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <strong>{{msg}}</strong>
+                    </div>
+                    {% endfor %}
+
+            </div>
+
+            <div class="row" id="googleMap">
+                <!--place de la carte googleMAP-->
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    <script type="text/javascript">
+
+        var mapCoords;//variable qui contient le mapping
+        var chemin;
+        var pointsCoords = Array();//trace du chemin dans la carte googleMap
+        var map;//variable googleMAP
+
+        function initialize() {
+               mapCoords = {
+                center:new google.maps.LatLng(14.6820574,-17.466410999999994),
+                zoom:15,
+                mapTypeId:google.maps.MapTypeId.ROADMAP
+            };
+            map=new google.maps.Map(document.getElementById("googleMap"),mapCoords);
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+        //script pour le suivi d'un appareil GPS
+        $(document).ready(function(){
+            $(".indexeur").click(function(){
+                //reinitialiser la carte
+                if(chemin){
+                    chemin.setMap(null);
+                    pointsCoords = Array();
+
+                }
+
+
+                $(".indexeur").removeClass('active glyphicon glyphicon-eye-open');
+
+                $(this).addClass('active glyphicon glyphicon-eye-open');
+
+                var appareil = $(".glyphicon-eye-open");//variable symbolisant l'appareil dans la partie JS
+                console.log(appareil.attr('id'));
+
+                //demarrage de la requete AJAX permettant de faire l'affichage du trajet
+                //setInterval(function(){},1500);
+                $.ajax({
+                    type: 'GET',
+                    url: '{{path("user_accueil")}}',
+                    data: {codeApp: appareil.attr('id')},
+                    timeout: 10000,
+                    dataType: 'json',
+
+                    beforeSend: function(){
+                        console.log("requete en cours");
+                    },
+
+                    success: function(data){
+                        console.log(data);
+                        var liste = $.parseJSON(data);
+                        console.log(liste);
+
+                        //transformation des donnees reçues
+                        for (var i=0 ; i < liste.length  ; i++){
+                            pointsCoords.push({lat : parseFloat(liste[i].lat) , lng : parseFloat(liste[i].lng)});
+                        }
+                        console.log(pointsCoords);
+                        chemin = new google.maps.Polyline({
+                          path: pointsCoords,
+                          geodesic: true,
+                          strokeColor: '#000000',
+                          strokeOpacity: 1.0,
+                          strokeWeight: 2
+                        });
+
+                        chemin.setMap(map);
+                    },
+                    error: function(xhr,status,error){
+                        console.log("Erreur de la requete");
+                    }
+                });
+
+                }
+            );
+
+
+        });
+    </script>
+{% endblock %}

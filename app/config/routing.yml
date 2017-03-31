@@ -1,0 +1,4 @@
+gps_tracker:
+    resource: "@GPSTrackerBundle/Resources/config/routing.yml"
+    prefix:   /
+

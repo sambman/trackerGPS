@@ -1,0 +1,21 @@
+gps_tracker_homepage:
+    pattern:  /
+    defaults: { _controller: GPSTrackerBundle:Utilisateur:index }
+
+user_index:
+    pattern: /login
+    defaults: { _controller: GPSTrackerBundle:Utilisateur:index }
+    requirements:
+        _method: GET|POST
+
+user_inscription:
+    pattern: /inscription
+    defaults: { _controller: GPSTrackerBundle:Utilisateur:inscription}
+    requirements:
+        _method: POST
+
+user_accueil:
+    pattern: /accueil
+    defaults: { _controller: GPSTrackerBundle:Utilisateur:accueil}
+    requirements:
+        _method: GET|POST
